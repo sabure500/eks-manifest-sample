@@ -25,7 +25,7 @@ spec:
             [
               /bin/sh,
               -c,
-              'echo "*** curl demo-app1-nginx.npd.svc.cluster.local --max-time 10 ***"; curl demo-app1-nginx.npd.svc.cluster.local --max-time 10; echo "*** curl http://10.128.125.5/ --max-time 10 ***"; curl http://10.128.125.5/ --max-time 10; echo "*** curl http://httpbin.org/ip --max-time 10 ***"; curl http://httpbin.org/ip --max-time 10; tail -f /dev/null',
+              'echo "*** curl demo-app1-nginx.npd.svc.cluster.local --max-time 5 ***"; curl demo-app1-nginx.npd.svc.cluster.local --max-time 5; echo "*** curl http://10.128.125.5/ --max-time 5 ***"; curl http://10.128.125.5/ --max-time 5; echo "*** curl http://httpbin.org/ip --max-time 5 ***"; curl http://httpbin.org/ip --max-time 5; tail -f /dev/null',
             ]
           securityContext:
             allowPrivilegeEscalation: false
