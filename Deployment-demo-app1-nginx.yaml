@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app1-nginx
+  namespace: npd
+spec:
+  selector:
+    matchLabels:
+      app: demo-app1-nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-app1-nginx
+    spec:
+      containers:
+      - name: demo
+        # image: public.ecr.aws/docker/library/nginx@sha256:32a8bd32c61c68a68a9d2db373655506223d46cddb2791cb4c2256ee92ba3d52 # 1.24.0(stable)
+        image: nginxinc/nginx-unprivileged:stable-perl
+        imagePullPolicy: IfNotPresent
+        ports:
+          - protocol: TCP
+            containerPort: 8080
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: nginx-index-volume
+        - mountPath: /tmp
+          name: tmp-volume
+      volumes:
+      - name: nginx-index-volume
+        configMap:
+          name: demo-app1-index
+      - name: tmp-volume
+        emptyDir: {}

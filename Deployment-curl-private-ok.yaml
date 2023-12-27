@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curl-private-ok
+  namespace: npd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: curl-private-ok
+  template:
+    metadata:
+      labels:
+        app: curl-private-ok
+        app.kubernetes.io/name: curl-private-ok
+        app.kubernetes.io/instance: checker
+        app.kubernetes.io/component: checker
+        app.kubernetes.io/version: "v1.0.0"
+    spec:
+      containers:
+        - name: curl-private-ok
+          image: "buildpack-deps:bookworm-curl@sha256:0c550cc0a4603b43a5e8fd61335ce1a71ebe11f165815178a2255215db75e7a1"
+          imagePullPolicy: IfNotPresent
+          args:
+            [
+              /bin/sh,
+              -c,
+              'echo "*** curl demo-app1-nginx.npd.svc.cluster.local --max-time 10 ***"; curl demo-app1-nginx.npd.svc.cluster.local --max-time 10; echo "*** curl http://10.128.125.5/ --max-time 10 ***"; curl http://10.128.125.5/ --max-time 10; echo "*** curl http://httpbin.org/ip --max-time 10 ***"; curl http://httpbin.org/ip --max-time 10; tail -f /dev/null',
+            ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            seccompProfile:
+              type: RuntimeDefault
+      nodeSelector:
+        kubernetes.io/os: linux
