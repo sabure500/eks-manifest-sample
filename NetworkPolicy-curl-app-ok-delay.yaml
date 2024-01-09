@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: curl-app-ok-delay
+  namespace: npd
+spec:
+  egress:
+    - ports:
+        - {}
+      to:
+        - podSelector:
+            matchLabels:
+              app: demo-app1-nginx
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: curl-app-ok-delay
+  policyTypes:
+    - Ingress
+    - Egress

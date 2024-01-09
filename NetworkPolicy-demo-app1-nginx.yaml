@@ -9,6 +9,9 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: curl-app-ok
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: curl-app-ok-delay
       ports:
         - {}
   podSelector:
